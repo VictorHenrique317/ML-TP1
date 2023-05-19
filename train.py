@@ -1,5 +1,8 @@
+import json
+import pickle
 from sklearn.model_selection import train_test_split
 from tensorflow.keras import layers
+from keras.callbacks import History
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
@@ -21,28 +24,35 @@ def trainMLP(metric, epochs, hidden_layer_neuron_number, learning_rate, batch_si
     X = data[:, 1:]
     y = data[:, 0]
 
-    mlp.fit(X, y, validation_split=test_set_percentage, epochs=epochs, batch_size=batch_size, verbose=1, shuffle=True, workers=8)
-    return mlp
+    history = History()
+    mlp.fit(X, y, validation_split=test_set_percentage, epochs=epochs, batch_size=batch_size, verbose=1, shuffle=True, workers=8, callbacks=[history])
+    return (mlp, history)
 
-def saveMLP(base_folder, mlp, learning_rate):
+def saveMLP(base_folder, mlp, learning_rate, history):
     if not os.path.exists('models'):
         os.makedirs('models')
 
+    with open(f"{base_folder}/history-lr{learning_rate}.pkl", 'wb') as file:
+        pickle.dump(history.history, file)
+        
     mlp.save(f"{base_folder}/mlp-lr{learning_rate}")
 
-metric = 'accuracy'
-test_set_percentage = 0.25
-epochs = 200 # 200 parece ser o suficiente
+params = json.load(open('params.json'))
 
-# Ordenado de forma que as primerias execuções sejam mais rápidas
-GD_batch_size = 5000 * round(1 - test_set_percentage, 2)
-GD_batch_size = round(GD_batch_size)
-batch_sizes = [GD_batch_size, 50, 10, 1]
-hidden_layer_neuron_numbers = [25, 50, 100]
-learning_rates = [10, 1, 0.5]
+test_set_percentage = params['test_set_percentage']
+metric = params['metric']
+epochs = params['epochs']
 
-# for batch_size in batch_sizes:
-for batch_size in [GD_batch_size]:
+# Ordenado de forma que as primeiras execuções sejam mais rápidas
+batch_sizes = [round(5000 * round(1 - params['test_set_percentage'], 2))]
+for batch_size in params.get('batch_sizes'):
+    batch_sizes.append(batch_size)
+# batch_sizes = [3750, 50, 10, 1] Originalmente
+
+hidden_layer_neuron_numbers = params['hidden_layer_neuron_numbers']
+learning_rates = params['learning_rates']
+
+for batch_size in batch_sizes:
     batch_folder = f"models/batch-size-{batch_size}"
     if not os.path.exists(batch_folder):
         os.makedirs(batch_folder)
@@ -53,16 +63,7 @@ for batch_size in [GD_batch_size]:
             os.makedirs(hidden_layer_folder)
 
         for learning_rate in learning_rates:
-            mlp = trainMLP(metric, epochs, hidden_layer_neuron_number, learning_rate, batch_size, test_set_percentage)
-            saveMLP(hidden_layer_folder, mlp, learning_rate)
+            mlp, history = trainMLP(metric, epochs, hidden_layer_neuron_number, learning_rate, batch_size, test_set_percentage)
+            saveMLP(hidden_layer_folder, mlp, learning_rate, history)
 
 # mlp = trainMLP(metric, epochs, hidden_layer_neuron_numbers[2], learning_rates[2], batch_sizes[0])
-
-# plotando o erro de teste e o erro empirico
-# plt.plot(mlp.history.history['loss'])
-# plt.plot(mlp.history.history['val_loss'])
-# plt.title('Erro empírico e erro de teste')
-# plt.ylabel('Erro')
-# plt.xlabel('Época')
-# plt.legend(['Empírico', 'Teste'], loc='upper left')
-# plt.show()

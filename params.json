@@ -1,0 +1,9 @@
+{
+    "metric": "accuracy",
+    "test_set_percentage": 0.25,
+    "epochs": 200,
+
+    "batch_sizes": [50, 10, 1],
+    "hidden_layer_neuron_numbers": [25, 50, 100],
+    "learning_rates":[10, 1, 0.5]
+}
