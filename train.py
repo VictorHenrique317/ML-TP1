@@ -59,10 +59,10 @@ for batch_size in [GD_batch_size]:
 # mlp = trainMLP(metric, epochs, hidden_layer_neuron_numbers[2], learning_rates[2], batch_sizes[0])
 
 # plotando o erro de teste e o erro empirico
-plt.plot(mlp.history.history['loss'])
-plt.plot(mlp.history.history['val_loss'])
-plt.title('Erro empírico e erro de teste')
-plt.ylabel('Erro')
-plt.xlabel('Época')
-plt.legend(['Empírico', 'Teste'], loc='upper left')
-plt.show()
+# plt.plot(mlp.history.history['loss'])
+# plt.plot(mlp.history.history['val_loss'])
+# plt.title('Erro empírico e erro de teste')
+# plt.ylabel('Erro')
+# plt.xlabel('Época')
+# plt.legend(['Empírico', 'Teste'], loc='upper left')
+# plt.show()
