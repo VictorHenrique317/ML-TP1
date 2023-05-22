@@ -7,6 +7,7 @@ import tensorflow as tf
 import numpy as np
 import os
 import json
+from keras.callbacks import History
 
 params = json.load(open('params.json'))
 
