@@ -1,0 +1,10 @@
+![Alt text](readme_imgs/tp1_ml_victor-1.png)
+![Alt text](readme_imgs/tp1_ml_victor-2.png)
+![Alt text](readme_imgs/tp1_ml_victor-3.png)
+![Alt text](readme_imgs/tp1_ml_victor-4.png)
+![Alt text](readme_imgs/tp1_ml_victor-5.png)
+![Alt text](readme_imgs/tp1_ml_victor-6.png)
+![Alt text](readme_imgs/tp1_ml_victor-7.png)
+![Alt text](readme_imgs/tp1_ml_victor-8.png)
+![Alt text](readme_imgs/tp1_ml_victor-9.png)
+
